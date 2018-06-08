@@ -14,9 +14,11 @@ For help getting started with Flutter, view the online
 
 ## Installation
 
+```bash
 $ git clone git@github.com:gmlewis/flutter_chat
 $ cd flutter_chat
 $ flutter run
+```
 
 ## License
 
