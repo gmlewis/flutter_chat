@@ -231,9 +231,11 @@ packages:
   phoenix_wings:
     dependency: "direct main"
     description:
-      path: "../phoenix_wings"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "0522ebbdbd8f30240de6a10a485f179c1ea808b8"
+      url: "https://github.com/gmlewis/phoenix_wings"
+    source: git
     version: "0.1.2"
   plugin:
     dependency: transitive

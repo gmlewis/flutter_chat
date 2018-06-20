@@ -10,7 +10,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   # phoenix_wings: ^0.1.2
   phoenix_wings:
-    path: ../phoenix_wings/
+    git:
+      url: https://github.com/gmlewis/phoenix_wings
 
 
 dev_dependencies:
