@@ -228,6 +228,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.1"
+  phoenix_wings:
+    dependency: "direct main"
+    description:
+      name: phoenix_wings
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   plugin:
     dependency: transitive
     description:

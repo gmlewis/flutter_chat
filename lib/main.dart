@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/channel.dart';
 
 void main() => runApp(new MyApp());
 
@@ -28,6 +29,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController textController = TextEditingController();
+
+  Channel _chatChannel;
+
+  @override
+  void initState() {
+    super.initState();
+    _chatChannel = Channel(user: "Glenn");
+  }
 
   @override
   Widget build(BuildContext context) {
