@@ -31,6 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController textController = TextEditingController();
 
   Channel _chatChannel;
+  List _presences = [];
 
   @override
   void initState() {
@@ -39,8 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
     _chatChannel.on("message:new", (Map payload) {
       print("message:new: payload=$payload");
     });
-    _chatChannel.onPresence((Map payload) {
-      print("onPresence: payload=$payload");
+    _chatChannel.onPresence((List presences) {
+      setState(() {
+        _presences = presences;
+      });
     });
   }
 
@@ -122,9 +125,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       Container(
                         height: 200.0,
                         child: ListView.builder(
-                          itemCount: 1,
+                          itemCount: _presences.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Text("yo");
+                            var online = DateTime.fromMillisecondsSinceEpoch(_presences[index]['onlineAt']);
+                            var msg = _presences[index]['user'] +
+                                " online since ${online.hour.toString().padLeft(2, '0')}:" +
+                                "${online.minute.toString().padLeft(2, '0')}:" +
+                                "${online.second.toString().padLeft(2, '0')}";
+                            return Text(msg);
                           },
                         ),
                       ),

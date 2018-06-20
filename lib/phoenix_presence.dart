@@ -80,5 +80,13 @@ class PhoenixPresence {
     return state;
   }
 
+  static List list(Map presences, [PhoenixChooserFunc chooser]) {
+    chooser ??= (String key, Map presence) => {key: presence};
+
+    var out = [];
+    presences.forEach((key, presence) => out.add(chooser(key, presence)));
+    return out;
+  }
+
   static _clone(object) => json.decode(json.encode(object));
 }

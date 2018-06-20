@@ -2,7 +2,7 @@ import 'package:phoenix_wings/phoenix_wings.dart';
 import 'package:flutter_chat/phoenix_presence.dart';
 
 typedef Null MapCallback(Map<String, dynamic> payload);
-typedef Null PresenceCallback(Map<String, dynamic> payload);
+typedef Null PresenceCallback(List presences);
 
 class Channel {
   final String url;
@@ -11,6 +11,11 @@ class Channel {
   final String user;
 
   var _presences = {};
+
+  var listBy = (String user, Map presence) => {
+    'user': user,
+    'onlineAt': presence['metas'][0]['online_at'],
+  };
 
   void on(String msgType, MapCallback callback) {
     chatChannel.on(msgType, (Map payload, String _ref, String _joinRef) {
@@ -21,11 +26,11 @@ class Channel {
   void onPresence(PresenceCallback callback) {
     chatChannel.on("presence_state", (Map payload, String _ref, String _joinRef) {
       _presences = PhoenixPresence.syncState(_presences, payload);
-      callback(_presences);
+      callback(PhoenixPresence.list(_presences, listBy));
     });
     chatChannel.on("presence_diff", (Map payload, String _ref, String _joinRef) {
       _presences = PhoenixPresence.syncDiff(_presences, payload);
-      callback(_presences);
+      callback(PhoenixPresence.list(_presences, listBy));
     });
   }
 
