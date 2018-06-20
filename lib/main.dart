@@ -36,6 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _chatChannel = Channel(user: "Glenn");
+    _chatChannel.on("message:new", (Map payload) {
+      print("message:new: payload=$payload");
+    });
+    _chatChannel.onPresence((Map payload) {
+      print("onPresence: payload=$payload");
+    });
   }
 
   @override
@@ -133,9 +139,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 controller: this.textController,
                 onSubmitted: (String value) {
                   setState(() {
-
+                    this.textController.clear();
                   });
-                  this.textController.clear();
+                  _chatChannel.push(value);
                 },
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),

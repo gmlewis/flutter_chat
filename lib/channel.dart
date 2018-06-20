@@ -1,13 +1,42 @@
 import 'package:phoenix_wings/phoenix_wings.dart';
+import 'package:flutter_chat/phoenix_presence.dart';
+
+typedef Null MapCallback(Map<String, dynamic> payload);
+typedef Null PresenceCallback(Map<String, dynamic> payload);
 
 class Channel {
   final String url;
   final PhoenixSocket socket;
   final PhoenixChannel chatChannel;
+  final String user;
 
-  var presences = {};
+  var _presences = {};
 
-  Channel._(this.url, this.socket, this.chatChannel) {
+  void on(String msgType, MapCallback callback) {
+    chatChannel.on(msgType, (Map payload, String _ref, String _joinRef) {
+      callback(payload);
+    });
+  }
+
+  void onPresence(PresenceCallback callback) {
+    chatChannel.on("presence_state", (Map payload, String _ref, String _joinRef) {
+      _presences = PhoenixPresence.syncState(_presences, payload);
+      callback(_presences);
+    });
+    chatChannel.on("presence_diff", (Map payload, String _ref, String _joinRef) {
+      _presences = PhoenixPresence.syncDiff(_presences, payload);
+      callback(_presences);
+    });
+  }
+
+  push(dynamic msg) {
+    chatChannel.push(
+      event: "message:new",
+      payload: msg,
+    );
+  }
+
+  Channel._(this.url, this.socket, this.chatChannel, this.user) {
     chatChannel.join();
   }
 
@@ -26,6 +55,6 @@ class Channel {
 
     var chatChannel = socket.channel("room:lobby", {});
 
-    return Channel._(url, socket, chatChannel);
+    return Channel._(url, socket, chatChannel, user);
   }
 }
